@@ -2,10 +2,11 @@ package com.mdtest.zhang.mdtest.ui.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -15,7 +16,7 @@ import butterknife.Unbinder;
  * MDTest --> com.mdtest.zhang.mdtest.ui.base
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends RxFragment {
 
     protected BaseActivity act;
     private Unbinder bind;

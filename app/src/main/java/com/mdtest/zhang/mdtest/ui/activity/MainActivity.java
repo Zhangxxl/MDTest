@@ -1,5 +1,8 @@
 package com.mdtest.zhang.mdtest.ui.activity;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -7,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -37,18 +41,25 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public ActionBarDrawerToggle mDrawerToggle;
+
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
+
     @BindView(R.id.drawer_layout)
     public DrawerLayout mDrawerLayout;
+
     @BindView(R.id.fab)
     public FloatingActionButton fab;
+
     @BindView(R.id.nav_view)
     public NavigationView nav_view;
+
     @BindView(R.id.tab)
     public TabLayout tab;
+
     @BindView(R.id.vp_content)
     public ViewPager vp_content;
+
     @BindView(R.id.banner)
     public ImageView iv_banner;
 
@@ -61,7 +72,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         initActionBar();
         findHeadView();
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action ^_^", Snackbar.LENGTH_LONG).setAction("Action", null).show());
+        fab.setOnClickListener(this::switchTheme);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open, R.string.close);
         mDrawerToggle.syncState();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
@@ -149,7 +160,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -199,5 +209,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         iv_head_icon = null;
         tv_head_title = null;
         tv_head_msg = null;
+    }
+
+    private void switchTheme(View view){
+        Snackbar make = Snackbar.make(view, "切换主题^_^", Snackbar.LENGTH_LONG);
+        make.setAction("Action", v -> {
+            Drawable drawable = iv_banner.getDrawable();
+            if (drawable!=null) {
+                DrawableCompat.setTintList(drawable, ColorStateList.valueOf(Color.YELLOW));
+            }
+        }).show();
     }
 }

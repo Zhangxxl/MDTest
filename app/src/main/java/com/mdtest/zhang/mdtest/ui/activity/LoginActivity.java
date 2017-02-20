@@ -17,6 +17,7 @@ import com.mdtest.zhang.mdtest.bean.ResponseBean;
 import com.mdtest.zhang.mdtest.bean.User;
 import com.mdtest.zhang.mdtest.http.HttpUtils;
 import com.mdtest.zhang.mdtest.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,6 +74,7 @@ public class LoginActivity extends BaseActivity {
         }
         Observable<ResponseBean<User>> login = myapp.httpService.login(json.toString());
         login.observeOn(AndroidSchedulers.mainThread())
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::onSuccessful, this::onError);
     }
@@ -87,6 +89,7 @@ public class LoginActivity extends BaseActivity {
             Observable.timer(500, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(AndroidSchedulers.mainThread())
+                    .compose(bindToLifecycle())
                     .map(timer -> {
                         bt_login.setProgress(0);
                         return timer;
@@ -110,12 +113,14 @@ public class LoginActivity extends BaseActivity {
     private void loginError(@NonNull String msg) {
         Observable.timer(1200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(bindToLifecycle())
                 .subscribe(timer -> {
                     bt_login.setProgress(-1);
                     ToastLess.$("--" + msg + "--");
                 });
         Observable.timer(2200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(bindToLifecycle())
                 .subscribe(timer -> {
                     bt_login.setProgress(0);
                     bt_login.setClickable(true);

@@ -34,8 +34,8 @@ public class KeyListFragment extends BaseFragment {
     @BindView(R.id.rv_list)
     RecyclerView recyclerView;
     @BindView(R.id.srl_keylist)
-    public SwipeRefreshLayout srl_keylist;
-    private List<Key> keylist;
+    public SwipeRefreshLayout srl_key_list;
+    private List<Key> key_list;
     private KeyListAdapter adapter;
 
     @Nullable
@@ -48,35 +48,37 @@ public class KeyListFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        srl_keylist.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW);
+        srl_key_list.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW);
         Observable.just(Key.class)
                 .subscribeOn(Schedulers.io())
+                .compose(bindToLifecycle())
                 .map(clazz -> act.myapp.dao.query(clazz))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(keylist -> this.keylist = keylist);
-        adapter = new KeyListAdapter(getActivity(), keylist);
+                .subscribe(key_list -> this.key_list = key_list);
+        adapter = new KeyListAdapter(getActivity(), key_list);
         recyclerView.setAdapter(adapter);
-        srl_keylist.setOnRefreshListener(this::onRefresh);
+        srl_key_list.setOnRefreshListener(this::onRefresh);
         onRefresh();
     }
 
     public void onRefresh() {
-        srl_keylist.setRefreshing(true);
+        srl_key_list.setRefreshing(true);
         JSONObject json = HttpUtils.getJson(HttpUtils.Api.API_DOWN_KEY);
         Observable<ResponseBean<List<Key>>> downKey = act.myapp.httpService.downKeys(json.toString());
         downKey.subscribeOn(Schedulers.io())
+                .compose(bindToLifecycle())
                 .map(keyListResp -> {
                     act.myapp.dao.save(keyListResp.bizobj);
                     return keyListResp.bizobj;
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(keyList -> {
-                    this.keylist = keyList;
+                    this.key_list = keyList;
                     if (adapter != null) {
-                        adapter.keyList = this.keylist;
+                        adapter.keyList = this.key_list;
                         adapter.notifyDataSetChanged();
                     }
-                    srl_keylist.setRefreshing(false);
+                    srl_key_list.setRefreshing(false);
                 });
     }
 }

@@ -58,7 +58,6 @@ public class KeyListAdapter extends RecyclerView.Adapter {
         int g = random.nextInt(255);
         int b = random.nextInt(255);
         iv_icon.setImageDrawable(DrawableLess.$tint(context.getResources().getDrawable(R.mipmap.ic_launcher).mutate(), Color.rgb(r,g,b)));
-
         myViewHolder.itemView.setOnClickListener(v -> onItemClickListener(myViewHolder.itemView, position));
     }
 
@@ -69,5 +68,10 @@ public class KeyListAdapter extends RecyclerView.Adapter {
 
     private void onItemClickListener(View itemView, int position) {
         ToastLess.$(keyList.get(position).key_name);
+
+    }
+
+    public void setItemClickListener(){
+
     }
 }

@@ -3,12 +3,12 @@ package com.mdtest.zhang.mdtest.ui.base;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.mdtest.zhang.mdtest.MyApp;
 import com.mdtest.zhang.mdtest.utils.ActManager;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -18,7 +18,7 @@ import butterknife.Unbinder;
  * MDTest --> com.mdtest.zhang.mdtest.ui
  */
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends RxAppCompatActivity {
 
     public MyApp myapp;
     private Unbinder bind;
